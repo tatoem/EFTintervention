@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Een moment voor u begint | Belastingdienst</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Source+Sans+3:wght@300;400;600&display=swap');
+:root {
+  --blauw: #154273; --lichtblauw: #d4e3f5; --groen: #1a6b3c; --lichtgroen: #d4ede0;
+  --oranje: #c85a00; --tekst: #1a1a1a; --licht: #f7f5f0; --grijs: #6b6b6b; --lijn: #d0ccc4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Sans 3', sans-serif; background: var(--licht); color: var(--tekst); min-height: 100vh; font-size: 18px; line-height: 1.75; }
+
+.topbalk { background: var(--blauw); padding: 12px 28px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.logo { display: flex; align-items: center; gap: 10px; color: white; font-size: 15px; font-weight: 600; }
+.topbalk-rechts { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.tb-knop { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 6px; padding: 6px 14px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.2s; display: flex; align-items: center; gap: 6px; }
+.tb-knop:hover { background: rgba(255,255,255,0.25); }
+.tb-knop.actief { background: rgba(255,255,255,0.3); }
+
+.container { max-width: 740px; margin: 0 auto; padding: 36px 24px 80px; }
+.scherm { display: none; animation: fadeIn 0.5s ease; }
+.scherm.actief { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.voortgang { display: flex; align-items: center; gap: 6px; margin-bottom: 36px; flex-wrap: wrap; }
+.v-stap { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--grijs); white-space: nowrap; }
+.v-stap.actief { color: var(--blauw); font-weight: 700; }
+.v-stap.klaar { color: var(--blauw); }
+.v-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--lijn); flex-shrink: 0; }
+.v-stap.actief .v-dot { background: var(--blauw); }
+.v-stap.klaar .v-dot { background: var(--blauw); }
+.v-lijn { flex: 1; height: 1px; background: var(--lijn); min-width: 12px; }
+
+h1 { font-family: 'Source Serif 4', serif; font-size: clamp(24px, 4vw, 34px); font-weight: 300; line-height: 1.3; color: var(--blauw); margin-bottom: 18px; }
+h1 strong { font-weight: 600; }
+h2 { font-family: 'Source Serif 4', serif; font-size: clamp(21px, 3.5vw, 28px); font-weight: 400; line-height: 1.3; color: var(--blauw); margin-bottom: 14px; }
+h3 { font-size: 14px; font-weight: 700; color: var(--blauw); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
+p { margin-bottom: 14px; }
+.lead { font-size: 20px; line-height: 1.6; margin-bottom: 20px; }
+.badge { display: inline-flex; align-items: center; gap: 8px; background: var(--lichtblauw); color: var(--blauw); padding: 5px 14px; border-radius: 20px; font-size: 14px; font-weight: 700; margin-bottom: 22px; }
+
+.disclaimer { background: white; border: 1px solid var(--lijn); border-left: 4px solid var(--oranje); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 20px 0; font-size: 15px; }
+.disclaimer strong { display: block; font-size: 12px; color: var(--oranje); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+
+.optout { background: white; border: 1px solid var(--lijn); border-radius: 10px; padding: 18px 22px; margin: 24px 0; display: flex; align-items: flex-start; gap: 14px; }
+.optout input[type="checkbox"] { margin-top: 3px; width: 20px; height: 20px; cursor: pointer; accent-color: var(--blauw); flex-shrink: 0; }
+.optout label { font-size: 16px; cursor: pointer; line-height: 1.5; }
+.optout label small { display: block; color: var(--grijs); font-size: 14px; margin-top: 3px; }
+.tijd { display: inline-flex; align-items: center; gap: 6px; color: var(--grijs); font-size: 15px; margin-bottom: 28px; }
+
+.nav { display: flex; gap: 10px; align-items: center; margin-top: 30px; flex-wrap: wrap; }
+.k-terug { background: white; border: 1px solid var(--lijn); color: var(--grijs); border-radius: 8px; padding: 12px 18px; font-family: inherit; font-size: 16px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+.k-terug:hover { border-color: var(--blauw); color: var(--blauw); }
+.k-primair { background: var(--blauw); color: white; border: none; border-radius: 8px; padding: 14px 24px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
+.k-primair:hover { background: #1a5494; }
+.k-primair:disabled { background: #a0b4cc; cursor: not-allowed; }
+.k-groen { background: var(--blauw); color: white; border: none; border-radius: 8px; padding: 14px 24px; font-family: inherit; font-size: 17px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; }
+.k-groen:hover { background: #1a5494; }
+.k-groen:disabled { background: #a0b4cc; cursor: not-allowed; }
+.k-tekst { background: none; border: none; color: var(--grijs); font-size: 15px; cursor: pointer; text-decoration: underline; font-family: inherit; padding: 8px; }
+
+.scene { border-radius: 14px; overflow: hidden; margin: 22px 0; }
+.scene-pos { background: linear-gradient(155deg, #154273 0%, #0d2946 100%); }
+.scene-top { padding: 20px 26px 14px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; }
+.scene-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; background: rgba(20,140,70,0.3); }
+.scene-label { color: rgba(255,255,255,0.5); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; }
+.scene-jaar { color: white; font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 300; }
+.scene-body { padding: 20px 26px 24px; }
+.scene-tekst { font-family: 'Source Serif 4', serif; font-size: clamp(16px, 2.3vw, 18px); line-height: 1.9; color: rgba(255,255,255,0.88); font-weight: 300; }
+.scene-tekst em { font-style: normal; color: white; font-weight: 400; }
+
+.eft-box { background: white; border: 2px solid var(--lichtblauw); border-radius: 12px; padding: 24px 26px; margin: 22px 0; }
+.eft-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.eft-oog { font-size: 24px; }
+.eft-instructie { font-size: 17px; font-style: italic; color: var(--blauw); background: var(--lichtblauw); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; line-height: 1.65; }
+.eft-vragen { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+.eft-vraag label { display: block; font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+.eft-vraag p { font-size: 14px; color: var(--grijs); margin-bottom: 6px; }
+
+.ta-wrap { position: relative; }
+textarea { width: 100%; border: 1px solid var(--lijn); border-radius: 8px; padding: 11px 46px 11px 13px; font-family: inherit; font-size: 16px; line-height: 1.6; color: var(--tekst); background: #fafaf8; resize: vertical; min-height: 76px; transition: border-color 0.2s; }
+textarea:focus { outline: none; border-color: var(--blauw); background: white; }
+textarea::placeholder { color: #bbb; }
+.mic-btn { position: absolute; right: 10px; top: 10px; background: none; border: none; cursor: pointer; padding: 4px; border-radius: 6px; color: var(--grijs); transition: color 0.2s, background 0.2s; font-size: 18px; line-height: 1; }
+.mic-btn:hover { color: var(--blauw); background: var(--lichtblauw); }
+.mic-btn.luisteren { color: #c0000a; animation: puls 1s ease-in-out infinite; }
+@keyframes puls { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.mic-status { font-size: 12px; color: var(--grijs); margin-top: 3px; min-height: 16px; }
+.mic-status.actief { color: #c0000a; }
+
+.vinkje { display: flex; align-items: flex-start; gap: 14px; background: #f0f4fa; border: 2px solid var(--lijn); border-radius: 10px; padding: 15px 18px; cursor: pointer; transition: border-color 0.2s, background 0.2s; margin-top: 4px; }
+.vinkje:hover { border-color: var(--blauw); }
+.vinkje.aan { border-color: var(--blauw); background: var(--lichtblauw); }
+.vinkje input[type="checkbox"] { width: 22px; height: 22px; flex-shrink: 0; margin-top: 1px; cursor: pointer; accent-color: var(--blauw); }
+.vinkje label { font-size: 16px; font-weight: 600; cursor: pointer; line-height: 1.5; }
+.vinkje.aan label { color: var(--blauw); }
+
+.afsluiting { background: linear-gradient(135deg, var(--blauw) 0%, #1a5494 100%); border-radius: 14px; padding: 36px; color: white; text-align: center; }
+.afsluiting h2 { color: white; }
+.afsluiting p { color: rgba(255,255,255,0.85); margin-bottom: 8px; }
+.afsluiting .k-primair { background: white; color: var(--blauw); margin-top: 22px; }
+.afsluiting .k-primair:hover { background: #e8f0fa; }
+.druppel { font-size: 52px; display: block; margin-bottom: 14px; }
+
+.einde-box { background: white; border: 1px solid var(--lijn); border-radius: 14px; padding: 40px 36px; text-align: center; margin-top: 10px; }
+.einde-icon { font-size: 52px; display: block; margin-bottom: 18px; }
+.einde-box h2 { color: var(--blauw); margin-bottom: 12px; }
+.einde-box p { color: var(--grijs); max-width: 480px; margin: 0 auto 10px; }
+.einde-box .k-primair { margin-top: 24px; font-size: 18px; }
+
+.vividheid-blok { margin: 20px 0 6px; }
+.vividheid-blok label { display: block; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.vividheid-blok p { font-size: 14px; color: var(--grijs); margin-bottom: 10px; }
+.vividheid-schaal { display: flex; gap: 8px; flex-wrap: wrap; }
+.vividheid-schaal input[type="radio"] { display: none; }
+.vividheid-schaal label.v-optie { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; border: 2px solid var(--lijn); border-radius: 10px; padding: 10px 14px; font-size: 15px; font-weight: 700; min-width: 52px; transition: border-color 0.2s, background 0.2s; background: white; line-height: 1.2; }
+.vividheid-schaal label.v-optie span.v-sub { font-size: 10px; font-weight: 400; color: var(--grijs); text-align: center; }
+.vividheid-schaal input[type="radio"]:checked + label.v-optie { border-color: var(--blauw); background: var(--lichtblauw); color: var(--blauw); }
+.vividheid-schaal input[type="radio"]:checked + label.v-optie .v-sub { color: var(--blauw); }
+.laag-vividheid-hint { background: #fff8e1; border: 1px solid #f5c842; border-left: 4px solid #f5c842; border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 15px; margin: 12px 0; display: none; }
+.laag-vividheid-hint.zichtbaar { display: block; }
+
+.info-blok { margin: 28px 0 24px; }
+.info-blok-intro { font-size: 16px; color: var(--grijs); margin-bottom: 18px; line-height: 1.65; border-left: 3px solid var(--lichtblauw); padding-left: 14px; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 6px; }
+@media (max-width: 560px) { .info-grid { grid-template-columns: 1fr; } }
+.info-kaart { background: white; border: 1px solid var(--lijn); border-radius: 10px; padding: 16px 18px; display: flex; gap: 13px; align-items: flex-start; transition: border-color 0.2s; }
+.info-kaart:hover { border-color: var(--blauw); }
+.info-kaart-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+.info-kaart-tekst strong { display: block; font-size: 14px; font-weight: 700; color: var(--blauw); margin-bottom: 4px; letter-spacing: 0.01em; }
+.info-kaart-tekst p { font-size: 14px; color: var(--grijs); line-height: 1.55; margin: 0; }
+.info-kaart-vol { grid-column: 1 / -1; }
+.info-oproep { background: var(--lichtblauw); border-radius: 10px; padding: 14px 18px; font-size: 15px; color: var(--blauw); font-weight: 600; display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+
+.scene-moment { margin-bottom: 28px; }
+.scene-moment:last-child { margin-bottom: 0; }
+.scene-moment-img { position: relative; width: 100%; height: 180px; border-radius: 12px; overflow: hidden; margin-bottom: 16px; }
+.scene-moment-img svg { display: block; width: 100%; height: 100%; }
+.scene-moment-label { position: absolute; top: 12px; left: 14px; z-index: 1; display: flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.13); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(6px); border-radius: 20px; padding: 4px 12px 4px 8px; color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; }
+.scene-moment-label span { font-size: 16px; }
+.scene-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 22px 0; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--oranje); outline-offset: 3px; border-radius: 4px; }
+
+body.hoog-contrast { --blauw: #003580; --lichtblauw: #b8d0f0; --tekst: #000000; --licht: #ffffff; --grijs: #333333; --lijn: #555555; }
+body.hoog-contrast textarea { background: #ffffff; border-color: #000; }
+body.hoog-contrast .scene-pos { background: #000; }
+body.hoog-contrast .scene-tekst { color: #ffffff; }
+body.hoog-contrast .k-terug { border-color: #000; color: #000; }
+body.hoog-contrast .laag-vividheid-hint { background: #fff9c4; border-color: #8a6a00; }
+
+@media (max-width: 560px) {
+  .container { padding: 18px 14px 60px; }
+  .scene-body, .scene-top { padding: 16px; }
+  .eft-box { padding: 18px; }
+  .einde-box { padding: 28px 20px; }
+  .nav { flex-direction: column; align-items: stretch; }
+  .nav .k-tekst { text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<body>
+
+<header class="topbalk" role="banner">
+  <div class="logo">
+    <svg width="30" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="4" fill="#4a90d4"/><path d="M8 10h16M8 16h12M8 22h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <span data-t="bd_naam">Belastingdienst</span>
+  </div>
+  <div class="topbalk-rechts">
+    <button class="tb-knop" id="btn-voorlees" onclick="toggleVoorlezen()" aria-label="Voorleesfunctie aan/uitzetten">
+      <span aria-hidden="true">&#128266;</span> <span data-t="voorlees">Voorlezen</span>
+    </button>
+    <button class="tb-knop" id="btn-contrast" onclick="toggleContrast()" aria-label="Hoog contrast aan/uitzetten">
+      <span aria-hidden="true">&#9680;</span> <span data-t="contrast">Contrast</span>
+    </button>
+    <button class="tb-knop" onclick="wisselTaal()" id="btn-taal" aria-label="Switch language / Wissel taal">EN</button>
+  </div>
+</header>
+
+<main class="container">
+
+<section class="scherm actief" id="s2" aria-labelledby="t-s2">
+  <div class="voortgang" role="navigation" aria-label="Voortgang">
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_intro_v">Introductie &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_info_v">Informatie &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap actief"><div class="v-dot"></div><span data-t="s_scenario">Scenario</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap"><div class="v-dot"></div><span data-t="s_verbeelding">Verbeelding</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap"><div class="v-dot"></div><span data-t="s_af">Afsluiting</span></div>
+  </div>
+
+  <h2 id="t-s2"><span data-t="s1_h2">Het jaar 2035</span></h2>
+  <p data-t="s1_intro">Lees de onderstaande beschrijving rustig door. Probeer u dit moment zo levendig mogelijk voor te stellen: hoe het eruit ziet, hoe het klinkt en hoe het voelt. Het gaat om een realistische toekomst, geen fictie.</p>
+
+  <div class="scene scene-pos" role="region" aria-label="Positief toekomstscenario 2035">
+    <div class="scene-top">
+      <div class="scene-icon" aria-hidden="true">&#127807;</div>
+      <div>
+        <div class="scene-label" data-t="situatieschets">Situatieschets</div>
+        <div class="scene-jaar" data-t="s1_jaar">2035 na tien jaar bewuste gewoonten</div>
+      </div>
+    </div>
+    <div class="scene-body">
+
+      <!-- Moment 1: Douche -->
+      <div class="scene-moment">
+        <div class="scene-moment-img">
+          <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="g1" cx="40%" cy="30%" r="70%"><stop offset="0%" stop-color="#1e5fa8"/><stop offset="100%" stop-color="#0c2643"/></radialGradient></defs><rect width="700" height="180" fill="url(#g1)"/><path d="M0 60 H700 M0 120 H700 M140 0 V180 M280 0 V180 M420 0 V180 M560 0 V180" stroke="white" stroke-opacity="0.04" stroke-width="1"/><circle cx="210" cy="110" r="28" fill="white" fill-opacity="0.06"/><circle cx="185" cy="85" r="20" fill="white" fill-opacity="0.05"/><circle cx="225" cy="70" r="16" fill="white" fill-opacity="0.04"/><rect x="344" y="0" width="12" height="50" rx="6" fill="#9fc8ef"/><rect x="300" y="44" width="100" height="12" rx="6" fill="#9fc8ef"/><rect x="298" y="52" width="104" height="26" rx="13" fill="#bdd9f5"/><rect x="304" y="55" width="60" height="8" rx="4" fill="white" fill-opacity="0.3"/><circle cx="316" cy="68" r="2.5" fill="#0c2643" fill-opacity="0.5"/><circle cx="328" cy="68" r="2.5" fill="#0c2643" fill-opacity="0.5"/><circle cx="340" cy="68" r="2.5" fill="#0c2643" fill-opacity="0.5"/><circle cx="352" cy="68" r="2.5" fill="#0c2643" fill-opacity="0.5"/><circle cx="364" cy="68" r="2.5" fill="#0c2643" fill-opacity="0.5"/><circle cx="376" cy="68" r="2.5" fill="#0c2643" fill-opacity="0.5"/><circle cx="388" cy="68" r="2.5" fill="#0c2643" fill-opacity="0.5"/><ellipse cx="316" cy="90" rx="3" ry="5" fill="#7ec8e3" fill-opacity="0.9"/><ellipse cx="316" cy="108" rx="2.5" ry="4" fill="#7ec8e3" fill-opacity="0.7"/><ellipse cx="316" cy="124" rx="2" ry="3.5" fill="#7ec8e3" fill-opacity="0.5"/><ellipse cx="328" cy="95" rx="3" ry="5" fill="#7ec8e3" fill-opacity="0.9"/><ellipse cx="328" cy="113" rx="2.5" ry="4" fill="#7ec8e3" fill-opacity="0.7"/><ellipse cx="328" cy="130" rx="2" ry="3.5" fill="#7ec8e3" fill-opacity="0.5"/><ellipse cx="340" cy="88" rx="3" ry="5" fill="#7ec8e3" fill-opacity="0.9"/><ellipse cx="340" cy="106" rx="2.5" ry="4" fill="#7ec8e3" fill-opacity="0.7"/><ellipse cx="340" cy="122" rx="2" ry="3.5" fill="#7ec8e3" fill-opacity="0.5"/><ellipse cx="352" cy="92" rx="3" ry="5" fill="#7ec8e3" fill-opacity="0.9"/><ellipse cx="352" cy="110" rx="2.5" ry="4" fill="#7ec8e3" fill-opacity="0.7"/><ellipse cx="352" cy="127" rx="2" ry="3.5" fill="#7ec8e3" fill-opacity="0.5"/><ellipse cx="364" cy="86" rx="3" ry="5" fill="#7ec8e3" fill-opacity="0.9"/><ellipse cx="364" cy="104" rx="2.5" ry="4" fill="#7ec8e3" fill-opacity="0.7"/><ellipse cx="364" cy="120" rx="2" ry="3.5" fill="#7ec8e3" fill-opacity="0.5"/><ellipse cx="376" cy="94" rx="3" ry="5" fill="#7ec8e3" fill-opacity="0.9"/><ellipse cx="376" cy="112" rx="2.5" ry="4" fill="#7ec8e3" fill-opacity="0.7"/><ellipse cx="376" cy="129" rx="2" ry="3.5" fill="#7ec8e3" fill-opacity="0.5"/><ellipse cx="388" cy="90" rx="3" ry="5" fill="#7ec8e3" fill-opacity="0.9"/><ellipse cx="388" cy="108" rx="2.5" ry="4" fill="#7ec8e3" fill-opacity="0.7"/><ellipse cx="388" cy="124" rx="2" ry="3.5" fill="#7ec8e3" fill-opacity="0.5"/><ellipse cx="352" cy="168" rx="55" ry="10" fill="#5ab4d4" fill-opacity="0.3"/><circle cx="470" cy="85" r="22" fill="#f5c3a0"/><ellipse cx="470" cy="70" rx="22" ry="14" fill="#6d4c41"/><rect x="448" y="107" width="44" height="55" rx="14" fill="#f5c3a0"/><path d="M448 120 Q430 105 425 115" stroke="#f5c3a0" stroke-width="12" stroke-linecap="round" fill="none"/><rect x="55" y="60" width="120" height="65" rx="12" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1.5"/><text x="115" y="83" text-anchor="middle" font-family="Arial,sans-serif" font-size="10" fill="white" fill-opacity="0.6" font-weight="700" letter-spacing="1">DOUCHETIJD</text><text x="115" y="109" text-anchor="middle" font-family="Arial,sans-serif" font-size="26" fill="white" font-weight="700">2:00</text><circle cx="560" cy="90" r="30" fill="#22c55e" fill-opacity="0.18" stroke="#4ade80" stroke-opacity="0.35" stroke-width="1.5"/><text x="553" y="100" font-size="26" fill="#4ade80">✓</text></svg>
+          <div class="scene-moment-label"><span>🚿</span> <span data-t="sm_label1">Ochtend, 2035</span></div>
+        </div>
+        <p class="scene-tekst" data-t="s1_tekst_1">Het is 2035. Je staat onder de douche en draait de kraan na een paar minuten dicht. <em>Zonder erbij na te denken.</em> Net als tandenpoetsen is het een gewoonte geworden, iets kleins dat je automatisch doet, net als de meeste mensen.</p>
+      </div>
+
+      <div class="scene-divider"></div>
+
+      <!-- Moment 2: Nieuwbouw -->
+      <div class="scene-moment">
+        <div class="scene-moment-img">
+          <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="g2" cx="55%" cy="40%" r="65%"><stop offset="0%" stop-color="#1a5280"/><stop offset="100%" stop-color="#0d2741"/></radialGradient></defs><rect width="700" height="180" fill="url(#g2)"/><rect x="0" y="152" width="700" height="28" fill="#1a5c30" fill-opacity="0.5"/><circle cx="100" cy="152" r="5" fill="#fbbf24"/><circle cx="590" cy="152" r="4" fill="#f472b6"/><circle cx="615" cy="150" r="3" fill="#fbbf24"/><circle cx="100" cy="38" r="22" fill="white" fill-opacity="0.08"/><circle cx="125" cy="30" r="28" fill="white" fill-opacity="0.08"/><circle cx="155" cy="36" r="20" fill="white" fill-opacity="0.07"/><circle cx="560" cy="28" r="18" fill="white" fill-opacity="0.07"/><circle cx="580" cy="20" r="22" fill="white" fill-opacity="0.07"/><rect x="240" y="82" width="220" height="78" rx="4" fill="#d4e8ff" fill-opacity="0.9"/><polygon points="225,84 350,20 475,84" fill="#e57373"/><line x1="225" y1="84" x2="350" y2="20" stroke="white" stroke-opacity="0.2" stroke-width="2"/><line x1="350" y1="20" x2="475" y2="84" stroke="white" stroke-opacity="0.2" stroke-width="2"/><rect x="322" y="118" width="56" height="42" rx="4" fill="#6d4c41"/><rect x="326" y="122" width="22" height="38" rx="2" fill="#8d6e63"/><circle cx="370" cy="140" r="4" fill="#ffd54f"/><rect x="258" y="100" width="44" height="34" rx="4" fill="#7ec8f0"/><line x1="280" y1="100" x2="280" y2="134" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/><line x1="258" y1="117" x2="302" y2="117" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/><rect x="398" y="100" width="44" height="34" rx="4" fill="#7ec8f0"/><line x1="420" y1="100" x2="420" y2="134" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/><line x1="398" y1="117" x2="442" y2="117" stroke="white" stroke-opacity="0.4" stroke-width="1.5"/><circle cx="132" cy="95" r="28" fill="none" stroke="#ffd54f" stroke-width="10"/><circle cx="132" cy="95" r="14" fill="none" stroke="#ffd54f" stroke-width="10"/><rect x="155" y="91" width="55" height="9" rx="4" fill="#ffd54f"/><rect x="195" y="100" width="9" height="18" rx="3" fill="#ffd54f"/><rect x="180" y="100" width="9" height="13" rx="3" fill="#ffd54f"/><circle cx="565" cy="112" r="14" fill="#f5c3a0"/><rect x="551" y="126" width="28" height="26" rx="8" fill="#3b82f6"/><circle cx="590" cy="116" r="12" fill="#f5c3a0"/><rect x="578" y="128" width="24" height="22" rx="7" fill="#ec4899"/><circle cx="545" cy="120" r="9" fill="#f5c3a0"/><rect x="536" y="129" width="18" height="18" rx="6" fill="#22c55e"/><rect x="575" y="30" width="100" height="38" rx="10" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1"/><text x="625" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" fill-opacity="0.6" font-weight="700">NIEUWBOUW</text><text x="625" y="62" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#4ade80" font-weight="700">Direct water ✓</text></svg>
+          <div class="scene-moment-label"><span>🏠</span> <span data-t="sm_label2">Familie &amp; wonen</span></div>
+        </div>
+        <p class="scene-tekst" data-t="s1_tekst_2">Later die dag belt een familielid dat ze de sleutel hebben gekregen van hun nieuwe huis, vlakbij. Je weet nog hoe nieuwbouw soms moest wachten op een aansluiting. Nu niet meer. <em>Er is genoeg drinkwater om nieuwe woningen direct aan te sluiten.</em></p>
+      </div>
+
+      <div class="scene-divider"></div>
+
+      <!-- Moment 3: Werk & economie -->
+      <div class="scene-moment">
+        <div class="scene-moment-img">
+          <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="g3" cx="50%" cy="35%" r="70%"><stop offset="0%" stop-color="#17508a"/><stop offset="100%" stop-color="#0c2440"/></radialGradient></defs><rect width="700" height="180" fill="url(#g3)"/><rect x="0" y="155" width="700" height="25" fill="#1a5c30" fill-opacity="0.4"/><rect x="470" y="80" width="35" height="80" rx="3" fill="white" fill-opacity="0.05"/><rect x="512" y="60" width="40" height="100" rx="3" fill="white" fill-opacity="0.05"/><rect x="560" y="72" width="30" height="88" rx="3" fill="white" fill-opacity="0.05"/><rect x="597" y="50" width="45" height="110" rx="3" fill="white" fill-opacity="0.06"/><rect x="649" y="90" width="30" height="70" rx="3" fill="white" fill-opacity="0.04"/><rect x="200" y="55" width="160" height="108" rx="5" fill="#2d6aad" fill-opacity="0.8"/><rect x="215" y="70" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="247" y="70" width="22" height="18" rx="3" fill="#ffd54f" fill-opacity="0.7"/><rect x="279" y="70" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="311" y="70" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="215" y="100" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="247" y="100" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="279" y="100" width="22" height="18" rx="3" fill="#ffd54f" fill-opacity="0.7"/><rect x="311" y="100" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="215" y="130" width="22" height="18" rx="3" fill="#ffd54f" fill-opacity="0.7"/><rect x="247" y="130" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="279" y="130" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="311" y="130" width="22" height="18" rx="3" fill="#7ec8f0" fill-opacity="0.8"/><rect x="225" y="43" width="110" height="16" rx="3" fill="#ffd54f" fill-opacity="0.8"/><text x="280" y="55" text-anchor="middle" font-family="Arial,sans-serif" font-size="8.5" fill="#0c2440" font-weight="700">REGIO BEDRIJF 2035</text><circle cx="120" cy="100" r="22" fill="#f5c3a0"/><ellipse cx="120" cy="85" rx="22" ry="13" fill="#5d4037"/><path d="M111 105 Q120 114 129 105" stroke="#c97952" stroke-width="2.5" stroke-linecap="round" fill="none"/><circle cx="113" cy="100" r="3" fill="#5d4037"/><circle cx="127" cy="100" r="3" fill="#5d4037"/><rect x="96" y="122" width="48" height="38" rx="12" fill="#3b82f6"/><polygon points="120,124 116,145 120,148 124,145" fill="#fbbf24"/><rect x="140" y="132" width="38" height="26" rx="5" fill="#8d6e63"/><rect x="150" y="128" width="18" height="8" rx="3" fill="none" stroke="#8d6e63" stroke-width="3"/><line x1="140" y1="145" x2="178" y2="145" stroke="#6d4c41" stroke-width="1.5"/><rect x="430" y="52" width="185" height="110" rx="10" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1.5"/><text x="522" y="72" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" fill-opacity="0.6" font-weight="700" letter-spacing="1">BANENGROEI REGIO</text><rect x="450" y="118" width="20" height="30" rx="3" fill="#3b82f6" fill-opacity="0.7"/><rect x="478" y="106" width="20" height="42" rx="3" fill="#3b82f6" fill-opacity="0.7"/><rect x="506" y="94" width="20" height="54" rx="3" fill="#3b82f6" fill-opacity="0.7"/><rect x="534" y="80" width="20" height="68" rx="3" fill="#22c55e" fill-opacity="0.85"/><rect x="562" y="66" width="20" height="82" rx="3" fill="#22c55e" fill-opacity="0.9"/><polyline points="460,133 488,121 516,109 544,95 572,81" fill="none" stroke="#ffd54f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="572" cy="81" r="5" fill="#ffd54f"/><text x="588" y="72" font-size="20" fill="#4ade80">↑</text></svg>
+          <div class="scene-moment-label"><span>💼</span> <span data-t="sm_label3">Werk &amp; economie</span></div>
+        </div>
+        <p class="scene-tekst" data-t="s1_tekst_3">Een vriend vertelt je dat hij net een nieuwe baan heeft gekregen bij een bedrijf in de regio. Dat bedrijf kon blijven en zelfs uitbreiden, omdat waterzekerheid geen probleem meer is. <em>Dat voelt goed voor hem en voor de regio.</em></p>
+      </div>
+
+      <div class="scene-divider"></div>
+
+      <!-- Moment 4: Natuur -->
+      <div class="scene-moment">
+        <div class="scene-moment-img">
+          <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a4a6e"/><stop offset="100%" stop-color="#0e2d50"/></linearGradient><radialGradient id="sun4" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#ffd54f"/><stop offset="100%" stop-color="#ffa726" stop-opacity="0"/></radialGradient></defs><rect width="700" height="180" fill="url(#sky4)"/><circle cx="90" cy="40" r="50" fill="url(#sun4)" fill-opacity="0.35"/><circle cx="90" cy="40" r="24" fill="#ffd54f" fill-opacity="0.8"/><line x1="90" y1="8" x2="90" y2="2" stroke="#ffd54f" stroke-width="3" stroke-linecap="round" stroke-opacity="0.7"/><line x1="114" y1="16" x2="119" y2="11" stroke="#ffd54f" stroke-width="3" stroke-linecap="round" stroke-opacity="0.7"/><line x1="122" y1="40" x2="129" y2="40" stroke="#ffd54f" stroke-width="3" stroke-linecap="round" stroke-opacity="0.7"/><line x1="114" y1="64" x2="119" y2="69" stroke="#ffd54f" stroke-width="3" stroke-linecap="round" stroke-opacity="0.7"/><line x1="66" y1="16" x2="61" y2="11" stroke="#ffd54f" stroke-width="3" stroke-linecap="round" stroke-opacity="0.7"/><line x1="58" y1="40" x2="51" y2="40" stroke="#ffd54f" stroke-width="3" stroke-linecap="round" stroke-opacity="0.7"/><ellipse cx="200" cy="195" rx="260" ry="80" fill="#2d7a3e" fill-opacity="0.7"/><ellipse cx="530" cy="190" rx="260" ry="75" fill="#22653a" fill-opacity="0.7"/><ellipse cx="350" cy="178" rx="350" ry="60" fill="#1a5c30" fill-opacity="0.8"/><rect x="0" y="150" width="700" height="30" fill="#1a5c30" fill-opacity="0.9"/><rect x="155" y="90" width="14" height="62" rx="4" fill="#5d4037"/><circle cx="162" cy="80" r="32" fill="#2e7d32"/><circle cx="145" cy="92" r="22" fill="#388e3c"/><circle cx="178" cy="86" r="24" fill="#388e3c"/><rect x="295" y="85" width="16" height="67" rx="4" fill="#5d4037"/><circle cx="303" cy="73" r="36" fill="#2e7d32"/><circle cx="282" cy="87" r="24" fill="#388e3c"/><circle cx="322" cy="80" r="26" fill="#43a047"/><rect x="470" y="76" width="18" height="76" rx="5" fill="#5d4037"/><circle cx="479" cy="62" r="40" fill="#2e7d32"/><circle cx="455" cy="78" r="28" fill="#388e3c"/><circle cx="502" cy="70" r="30" fill="#43a047"/><rect x="600" y="105" width="12" height="47" rx="4" fill="#5d4037"/><circle cx="606" cy="96" r="26" fill="#388e3c"/><circle cx="140" cy="153" r="5" fill="#ffd54f" fill-opacity="0.8"/><circle cx="200" cy="154" r="4" fill="#f472b6" fill-opacity="0.8"/><circle cx="380" cy="152" r="5" fill="#ffd54f" fill-opacity="0.8"/><circle cx="420" cy="153" r="4" fill="#f472b6" fill-opacity="0.8"/><path d="M0 162 Q100 154 200 160 Q320 167 450 157 Q550 149 700 162" stroke="#7ec8f0" stroke-width="4" stroke-linecap="round" fill="none" stroke-opacity="0.4"/><path d="M390 30 Q396 24 402 30" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.7"/><path d="M408 22 Q414 16 420 22" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.6"/><path d="M430 33 Q436 27 442 33" stroke="white" stroke-width="2" stroke-linecap="round" fill="none" stroke-opacity="0.5"/><circle cx="370" cy="110" r="15" fill="#f5c3a0"/><ellipse cx="370" cy="97" rx="15" ry="10" fill="#d32f2f"/><rect x="357" y="125" width="26" height="30" rx="8" fill="#1565c0"/><line x1="363" y1="155" x2="355" y2="178" stroke="#1565c0" stroke-width="8" stroke-linecap="round"/><line x1="377" y1="155" x2="384" y2="175" stroke="#1565c0" stroke-width="8" stroke-linecap="round"/><line x1="357" y1="135" x2="340" y2="122" stroke="#f5c3a0" stroke-width="7" stroke-linecap="round"/><rect x="520" y="18" width="158" height="44" rx="10" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1.5"/><text x="598" y="36" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" fill-opacity="0.6" font-weight="700" letter-spacing="1">NATUUR IN 2035</text><text x="598" y="55" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" fill="#4ade80" font-weight="700">Gezonder en groener</text></svg>
+          <div class="scene-moment-label"><span>🌿</span> <span data-t="sm_label4">Natuur &amp; landschap</span></div>
+        </div>
+        <p class="scene-tekst" data-t="s1_tekst_4">Tijdens een wandeling zie je dat natuurgebieden er gezonder uitzien. De grond is minder droog en water hoeft minder intensief gezuiverd te worden. <em>Dat scheelt energie en middelen.</em></p>
+      </div>
+
+      <div class="scene-divider"></div>
+
+      <!-- Moment 5: Zekerheid & dagelijks leven -->
+      <div class="scene-moment">
+        <div class="scene-moment-img">
+          <svg viewBox="0 0 700 180" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="g5" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#1c5c9e"/><stop offset="100%" stop-color="#0b2338"/></radialGradient><radialGradient id="drop5" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#4fc3f7"/><stop offset="100%" stop-color="#0288d1"/></radialGradient></defs><rect width="700" height="180" fill="url(#g5)"/><ellipse cx="350" cy="112" rx="80" ry="30" fill="none" stroke="#4fc3f7" stroke-opacity="0.12" stroke-width="2"/><ellipse cx="350" cy="112" rx="115" ry="44" fill="none" stroke="#4fc3f7" stroke-opacity="0.09" stroke-width="2"/><ellipse cx="350" cy="112" rx="150" ry="58" fill="none" stroke="#4fc3f7" stroke-opacity="0.06" stroke-width="2"/><path d="M350 22 Q392 72 392 108 Q392 144 350 154 Q308 144 308 108 Q308 72 350 22Z" fill="url(#drop5)" fill-opacity="0.9"/><ellipse cx="334" cy="74" rx="10" ry="20" fill="white" fill-opacity="0.28" transform="rotate(-20 334 74)"/><polyline points="328,102 344,120 376,82" fill="none" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><rect x="105" y="95" width="16" height="65" rx="3" fill="white" fill-opacity="0.4"/><polygon points="113,80 99,98 127,98" fill="white" fill-opacity="0.5"/><line x1="113" y1="85" x2="113" y2="55" stroke="white" stroke-opacity="0.4" stroke-width="5" stroke-linecap="round"/><line x1="113" y1="85" x2="83" y2="95" stroke="white" stroke-opacity="0.4" stroke-width="5" stroke-linecap="round"/><line x1="113" y1="85" x2="143" y2="95" stroke="white" stroke-opacity="0.4" stroke-width="5" stroke-linecap="round"/><line x1="113" y1="85" x2="113" y2="115" stroke="white" stroke-opacity="0.4" stroke-width="5" stroke-linecap="round"/><path d="M0 157 Q150 150 350 157 Q500 163 700 155" fill="none" stroke="#7ec8f0" stroke-opacity="0.4" stroke-width="6" stroke-linecap="round"/><path d="M0 165 Q150 158 350 165 Q500 171 700 163" fill="none" stroke="#4fc3f7" stroke-opacity="0.25" stroke-width="4" stroke-linecap="round"/><rect x="540" y="60" width="55" height="18" rx="9" fill="white" fill-opacity="0.55"/><rect x="558" y="50" width="18" height="12" rx="5" fill="white" fill-opacity="0.45"/><rect x="543" y="78" width="12" height="38" rx="4" fill="white" fill-opacity="0.45"/><ellipse cx="549" cy="126" rx="5" ry="7" fill="#4fc3f7" fill-opacity="0.9"/><ellipse cx="549" cy="141" rx="4" ry="6" fill="#4fc3f7" fill-opacity="0.7"/><ellipse cx="549" cy="155" rx="3" ry="5" fill="#4fc3f7" fill-opacity="0.5"/><rect x="565" y="96" width="115" height="55" rx="10" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1.5"/><text x="622" y="116" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" fill-opacity="0.6" font-weight="700" letter-spacing="1">WATERZEKERHEID</text><text x="622" y="136" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" fill="#4ade80" font-weight="700">Robuust systeem ✓</text><rect x="20" y="50" width="138" height="58" rx="10" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.15" stroke-width="1.5"/><text x="89" y="70" text-anchor="middle" font-family="Arial,sans-serif" font-size="9" fill="white" fill-opacity="0.6" font-weight="700" letter-spacing="1">NEDERLAND 2035</text><text x="89" y="88" text-anchor="middle" font-family="Arial,sans-serif" font-size="11.5" fill="white" fill-opacity="0.9">Minder afhankelijk</text><text x="89" y="102" text-anchor="middle" font-family="Arial,sans-serif" font-size="11.5" fill="#4ade80">van buitenland ✓</text></svg>
+          <div class="scene-moment-label"><span>💧</span> <span data-t="sm_label5">Zekerheid &amp; rust</span></div>
+        </div>
+        <p class="scene-tekst" data-t="s1_tekst_5">Je merkt ook dat Nederland minder afhankelijk is van water uit het buitenland. Dat geeft een gevoel van zekerheid, dat het systeem robuust is en je erop kunt vertrouwen.<br><br>Voor jou voelt het dagelijks leven eigenlijk hetzelfde. De waterdruk is stabiel, er zijn geen onverwacht hoge rekeningen en je kunt nog steeds gewoon drinken en koken zoals je gewend bent. <em>De kleine gewoontes, zoals korter douchen of een vollere wasmachine, hebben je kwaliteit van leven nauwelijks veranderd, maar hebben wel bijgedragen aan meer zekerheid.</em></p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="k-terug" onclick="window.location.href='https://uva.fra1.qualtrics.com/jfe/form/SV_bC10e0AaOJ9H3uK'">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span data-t="terug">Terug</span>
+    </button>
+    <button class="k-primair" onclick="gaanaar(3)">
+      <span data-t="s1_btn">Dit moment verbeelden</span>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </div>
+</section>
+
+<section class="scherm" id="s3" aria-labelledby="t-s3">
+  <div class="voortgang" role="navigation" aria-label="Voortgang">
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_intro_v">Introductie &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_info_v">Informatie &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_scenario_v">Scenario &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap actief"><div class="v-dot"></div><span data-t="s_verbeelding">Verbeelding</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap"><div class="v-dot"></div><span data-t="s_af">Afsluiting</span></div>
+  </div>
+
+  <h2 id="t-s3"><span data-t="s2_h2">Stel u dit moment echt voor</span></h2>
+  <p data-t="s2_intro">Neem even de tijd. Sluit eventueel uw ogen. Beantwoord de vijf vragen hieronder zo concreet mogelijk, dit helpt het moment levendiger te maken. U kunt er over nadenken, typen, op het microfoonpictogram drukken om te spreken, of een vel papier pakken en het moment schetsen.</p>
+
+  <div class="eft-box" role="group" aria-labelledby="eft-h">
+    <div class="eft-header">
+      <span class="eft-oog" aria-hidden="true">&#129504;</span>
+      <h3 id="eft-h" data-t="eft_h">Verbeeldingsoefening</h3>
+    </div>
+    <div class="eft-instructie" role="note">
+      <span data-t="eft_instructie">U bent in 2035. U heeft jarenlang kleine gewoonten volgehouden: korter douchen, eco-stand, de kleine knop. Het leek onbeduidend, maar samen heeft het iets echts teweeggebracht. Stel u dit moment zo levendig mogelijk voor, alsof u er werkelijk bent.</span>
+    </div>
+    <div class="eft-vragen">
+      <div class="eft-vraag">
+        <label for="e1a" data-t="eft_q1_l">Waar bent u?</label>
+        <p data-t="eft_q1_p">Beschrijf de plek zo concreet mogelijk.</p>
+        <div class="ta-wrap">
+          <textarea id="e1a" rows="2" aria-required="false"></textarea>
+          <button class="mic-btn" onclick="startSpreken('e1a','mic1','st1')" id="mic1" aria-label="Spreek uw antwoord in" title="Spreek uw antwoord in">&#127908;</button>
+        </div>
+        <div class="mic-status" id="st1"></div>
+      </div>
+      <div class="eft-vraag">
+        <label for="e1c" data-t="eft_q2_l">Wie is er bij u?</label>
+        <p data-t="eft_q2_p">Beschrijf wie er aanwezig is in dit moment.</p>
+        <div class="ta-wrap">
+          <textarea id="e1c" rows="2" aria-required="false"></textarea>
+          <button class="mic-btn" onclick="startSpreken('e1c','mic2','st2')" id="mic2" aria-label="Spreek uw antwoord in" title="Spreek uw antwoord in">&#127908;</button>
+        </div>
+        <div class="mic-status" id="st2"></div>
+      </div>
+      <div class="eft-vraag">
+        <label for="e1d" data-t="eft_q3_l">Wat doet u?</label>
+        <p data-t="eft_q3_p">Beschrijf wat u aan het doen bent.</p>
+        <div class="ta-wrap">
+          <textarea id="e1d" rows="2" aria-required="false"></textarea>
+          <button class="mic-btn" onclick="startSpreken('e1d','mic3','st3')" id="mic3" aria-label="Spreek uw antwoord in" title="Spreek uw antwoord in">&#127908;</button>
+        </div>
+        <div class="mic-status" id="st3"></div>
+      </div>
+      <div class="eft-vraag">
+        <label for="e1b" data-t="eft_q4_l">Hoe voelt u zich?</label>
+        <p data-t="eft_q4_p">Beschrijf wat er door u heen gaat.</p>
+        <div class="ta-wrap">
+          <textarea id="e1b" rows="2" aria-required="false"></textarea>
+          <button class="mic-btn" onclick="startSpreken('e1b','mic4','st4')" id="mic4" aria-label="Spreek uw antwoord in" title="Spreek uw antwoord in">&#127908;</button>
+        </div>
+        <div class="mic-status" id="st4"></div>
+      </div>
+      <div class="eft-vraag">
+        <label for="e1e" data-t="eft_q5_l">Wat hoort en ziet u?</label>
+        <p data-t="eft_q5_p">Beschrijf de geluiden en beelden om u heen zo concreet mogelijk.</p>
+        <div class="ta-wrap">
+          <textarea id="e1e" rows="2" aria-required="false"></textarea>
+          <button class="mic-btn" onclick="startSpreken('e1e','mic5','st5')" id="mic5" aria-label="Spreek uw antwoord in" title="Spreek uw antwoord in">&#127908;</button>
+        </div>
+        <div class="mic-status" id="st5"></div>
+      </div>
+    </div>
+    <div class="vividheid-blok">
+      <label data-t="viv_label">Hoe levendig was uw verbeelding?</label>
+      <p data-t="viv_sub">Geef aan hoe helder en concreet u het scenario voor u zag, 1 is nauwelijks, 5 is alsof u er werkelijk was.</p>
+      <div class="vividheid-schaal" role="radiogroup" aria-labelledby="viv-legend">
+        <span id="viv-legend" class="sr-only" data-t="viv_label">Hoe levendig was uw verbeelding?</span>
+        <input type="radio" name="vividheid" id="viv1" value="1" onchange="checkVividheid()">
+        <label class="v-optie" for="viv1">1<span class="v-sub" data-t="viv_1">Nauwelijks</span></label>
+        <input type="radio" name="vividheid" id="viv2" value="2" onchange="checkVividheid()">
+        <label class="v-optie" for="viv2">2<span class="v-sub"></span></label>
+        <input type="radio" name="vividheid" id="viv3" value="3" onchange="checkVividheid()">
+        <label class="v-optie" for="viv3">3<span class="v-sub"></span></label>
+        <input type="radio" name="vividheid" id="viv4" value="4" onchange="checkVividheid()">
+        <label class="v-optie" for="viv4">4<span class="v-sub"></span></label>
+        <input type="radio" name="vividheid" id="viv5" value="5" onchange="checkVividheid()">
+        <label class="v-optie" for="viv5">5<span class="v-sub" data-t="viv_5">Heel levendig</span></label>
+      </div>
+      <div class="laag-vividheid-hint" id="laag-vividheid-hint" role="alert">
+        <span data-t="viv_hint">Uw verbeelding was nog niet zo helder. Probeer het opnieuw: sluit uw ogen, adem diep in en stel u het moment zo concreet mogelijk voor. Waar staat u? Wat ruikt u? Wat hoort u? Vul daarna de vragen opnieuw in.</span>
+      </div>
+    </div>
+
+    <div class="vinkje" id="v1-wrap" onclick="toggleVinkje('v1','s2-btn')">
+      <input type="checkbox" id="v1">
+      <label for="v1"><span data-t="vinkje_tekst">Ik heb me dit scenario voorgesteld</span></label>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="k-terug" onclick="gaanaar(2)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      <span data-t="terug">Terug</span>
+    </button>
+    <button class="k-groen" id="s2-btn" onclick="gaanaar(4)" disabled>
+      <span data-t="s2_btn">Naar de afsluiting</span>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </section>
+
+<section class="scherm" id="s4" aria-labelledby="t-s4">
+  <div class="voortgang" role="navigation" aria-label="Voortgang">
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_intro_v">Introductie &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_info_v">Informatie &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_scenario_v">Scenario &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap klaar"><div class="v-dot"></div><span data-t="s_verbeelding_v">Verbeelding &#10003;</span></div>
+    <div class="v-lijn"></div>
+    <div class="v-stap actief"><div class="v-dot"></div><span data-t="s_af">Afsluiting</span></div>
+  </div>
+
+  <div class="afsluiting" role="region" aria-labelledby="t-s4">
+    <span class="druppel" role="img" aria-label="Druppel">&#128167;</span>
+    <h2 id="t-s4"><span data-t="af_h2">Bedankt voor dit moment</span></h2>
+    <p data-t="af_p1">U heeft nagedacht over iets dat er echt toe doet, voor uw omgeving, voor de natuur en voor de mensen na ons.</p>
+    <p data-t="af_p2">Kleine gewoonten van velen maken een groot verschil.</p>
+    <button class="k-primair" onclick="window.location.href='https://uva.fra1.qualtrics.com/jfe/form/SV_bC10e0AaOJ9H3uK'">
+      <span data-t="af_btn">Terug naar de vragenlijst</span>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+  <p style="text-align:center;color:var(--grijs);font-size:14px;margin-top:20px;" data-t="af_disc">Deze sessie maakt geen deel uit van uw belastingaangifte. Uw antwoorden worden niet opgeslagen.</p>
+</section>
+
+
+
+</main>
+
+<script>
+let huidig = 2;
+let taal = 'nl';
+let voorlezenAan = false;
+let actieveMic = null;
+let herkenning = null;
+
+const T = {
+  nl: {
+    bd_naam:'Belastingdienst', voorlees:'Voorlezen', contrast:'Contrast',
+    s_intro:'Introductie', s_intro_v:'Introductie',
+    s_info:'Informatie', s_info_v:'Informatie',
+    s_scenario:'Scenario', s_scenario_v:'Scenario',
+    s_verbeelding:'Verbeelding', s_verbeelding_v:'Verbeelding',
+    s_af:'Afsluiting', s_af_v:'Afsluiting',
+    voor_badge:'Voordat u begint',
+    s0_h1:'Even <strong>twee minuten</strong> voor u begint',
+    s0_lead:'We vragen u kort stil te staan bij iets dat iedereen in Nederland raakt: ons drinkwater.',
+    s0_p1:'Dit is geen onderdeel van uw belastingaangifte. Het is een kort moment om na te denken over de toekomst, voor uzelf, uw omgeving en de mensen na ons.',
+    disc_titel:'Disclaimer',
+    disc_tekst:'Deze sessie maakt geen deel uit van uw belastingaangifte en heeft geen invloed op uw aangifte. Uw antwoorden worden niet opgeslagen en niet gedeeld met de Belastingdienst of derden.',
+    tijdsduur:'Duurt ongeveer 3 minuten',
+        skip_sub:'U kunt op elk moment doorgaan zonder de sessie af te ronden.',
+    s0_btn:'Ik doe mee', direct_aangifte:'Direct naar aangifte',
+    info_h2:'Waarom is dit belangrijk?',
+    info_p1:'We hebben allemaal toegang tot drinkwater uit de kraan, iets wat we vaak als vanzelfsprekend beschouwen. Het doel is dat dit zo blijft. Het waterverbruik in Nederland stijgt echter, terwijl de beschikbaarheid afneemt. Als er niets verandert, kunnen rond 2030 alle regio\'s te maken krijgen met drinkwatertekorten.',
+    info_k1_t:'Huishoudens', info_k1_p:'Bestaande woningen blijven drinkwater ontvangen, maar mogelijk met lagere waterdruk of beperkingen. Nieuwbouwwijken kunnen vertraging oplopen bij de aansluiting. Dit remt de woningbouw en werkt de woningkrapte in de hand. Hogere investeringskosten kunnen ook leiden tot hogere waterprijzen, extra voelbaar voor lagere inkomens.',
+    info_k2_t:'Bedrijven & landbouw', info_k2_p:'Water is onmisbaar voor bedrijven en de landbouw. Als de beschikbaarheid afneemt, kunnen bedrijven hun vestigingskeuze herzien. Dit raakt banen en economische groei. In de landbouw kan schaarste zelfs leiden tot verplaatsing van boerenbedrijven naar andere landen, economisch onwenselijk.',
+    info_k3_t:'Natuur & milieu', info_k3_p:'Meer wateronttrekking verlaagt het grondwaterpeil en bedreigt kwetsbare ecosystemen zoals duinen en veengebieden. Waterzuivering kost ook energie en chemicaliën, zeker voor stoffen als PFAS. Elk liter water dat niet gebruikt wordt, vermindert die druk.',
+    info_k4_t:'Onafhankelijkheid', info_k4_p:'Nederland is deels afhankelijk van oppervlaktewater uit buurlanden zoals Duitsland, België en Zwitserland. Dit creëert externe afhankelijkheden die kwetsbaar kunnen zijn bij internationale spanningen of klimaatverandering.',
+    info_k5_t:'Wat kunt u doen?', info_k5_p:'Iedereen kan bijdragen door waar mogelijk minder water te gebruiken. Kleine veranderingen in dagelijkse gewoonten, zoals korter douchen, de wasmachine alleen vol draaien en de spaarknop van het toilet gebruiken, maken samen een betekenisvolle impact.',
+    info_oproep:'Samen zorgen we dat drinkwater voor iedereen beschikbaar blijft.',
+    volgende:'Volgende',
+    s1_h2:'Het jaar 2035',
+    s1_intro:'Lees de onderstaande beschrijving rustig door. Probeer u dit moment zo levendig mogelijk voor te stellen: hoe het eruit ziet, hoe het klinkt en hoe het voelt. Het gaat om een realistische toekomst, geen fictie.',
+    situatieschets:'Situatieschets',
+    s1_jaar:'2035 na tien jaar bewuste gewoonten',
+    s1_tekst_1:'Het is 2035. Je staat onder de douche en draait de kraan na een paar minuten dicht. <em>Zonder erbij na te denken.</em> Net als tandenpoetsen is het een gewoonte geworden, iets kleins dat je automatisch doet, net als de meeste mensen.',
+    s1_tekst_2:'Later die dag belt een familielid dat ze de sleutel hebben gekregen van hun nieuwe huis, vlakbij. Je weet nog hoe nieuwbouw soms moest wachten op een aansluiting. Nu niet meer. <em>Er is genoeg drinkwater om nieuwe woningen direct aan te sluiten.</em>',
+    s1_tekst_3:'Een vriend vertelt je dat hij net een nieuwe baan heeft gekregen bij een bedrijf in de regio. Dat bedrijf kon blijven en zelfs uitbreiden, omdat waterzekerheid geen probleem meer is. <em>Dat voelt goed voor hem en voor de regio.</em>',
+    s1_tekst_4:'Tijdens een wandeling zie je dat natuurgebieden er gezonder uitzien. De grond is minder droog en water hoeft minder intensief gezuiverd te worden. <em>Dat scheelt energie en middelen.</em>',
+    s1_tekst_5:'Je merkt ook dat Nederland minder afhankelijk is van water uit het buitenland. Dat geeft een gevoel van zekerheid, dat het systeem robuust is en je erop kunt vertrouwen.<br><br>Voor jou voelt het dagelijks leven eigenlijk hetzelfde. De waterdruk is stabiel, er zijn geen onverwacht hoge rekeningen en je kunt nog steeds gewoon drinken en koken zoals je gewend bent. <em>De kleine gewoontes, zoals korter douchen of een vollere wasmachine, hebben je kwaliteit van leven nauwelijks veranderd, maar hebben wel bijgedragen aan meer zekerheid.</em>',
+    sm_label1:'Ochtend, 2035', sm_label2:'Familie &amp; wonen', sm_label3:'Werk &amp; economie', sm_label4:'Natuur &amp; landschap', sm_label5:'Zekerheid &amp; rust',
+    s1_btn:'Dit moment verbeelden', terug:'Terug',
+    s2_h2:'Stel u dit moment echt voor',
+    s2_intro:'Neem even de tijd. Sluit eventueel uw ogen. Beantwoord de vijf vragen hieronder zo concreet mogelijk, dit helpt het moment levendiger te maken. U kunt typen, op het microfoonpictogram drukken om te spreken, of een vel papier pakken en het moment schetsen.',
+    eft_h:'Verbeeldingsoefening',
+    eft_instructie:'U bent in 2035. U heeft jarenlang kleine gewoonten volgehouden: korter douchen, eco-stand, de kleine knop. Het leek onbeduidend, maar samen heeft het iets echts teweeggebracht. Stel u dit moment zo levendig mogelijk voor, alsof u er werkelijk bent.',
+    eft_q1_l:'Waar bent u?',
+    eft_q1_p:'Beschrijf de plek zo concreet mogelijk.',
+    eft_q2_l:'Wie is er bij u?',
+    eft_q2_p:'Beschrijf wie er aanwezig is in dit moment.',
+    eft_q3_l:'Wat doet u?',
+    eft_q3_p:'Beschrijf wat u aan het doen bent.',
+    eft_q4_l:'Hoe voelt u zich?',
+    eft_q4_p:'Beschrijf wat er door u heen gaat.',
+    eft_q5_l:'Wat hoort en ziet u?',
+    eft_q5_p:'Beschrijf de geluiden en beelden om u heen zo concreet mogelijk.',
+    vinkje_tekst:'Ik heb me dit scenario voorgesteld',
+    viv_label:'Hoe levendig was uw verbeelding?',
+    viv_sub:'Geef aan hoe helder en concreet u het scenario voor u zag, 1 is nauwelijks, 5 is alsof u er werkelijk was.',
+    viv_1:'Nauwelijks',
+    viv_5:'Heel levendig',
+    viv_hint:'Uw verbeelding was nog niet zo helder. Probeer het opnieuw: sluit uw ogen, adem diep in en stel u het moment zo concreet mogelijk voor. Waar staat u? Wat ruikt u? Wat hoort u? Vul daarna de vragen opnieuw in.',
+    s2_btn:'Naar de afsluiting',
+    af_h2:'Bedankt voor dit moment',
+    af_p1:'U heeft nagedacht over iets dat er echt toe doet, voor uw omgeving, voor de natuur en voor de mensen na ons.',
+    af_p2:'Kleine gewoonten van velen maken een groot verschil.',
+    af_btn:'Terug naar de vragenlijst',
+    af_disc:'Deze sessie maakt geen deel uit van uw belastingaangifte. Uw antwoorden worden niet opgeslagen.',
+    einde_h:'Dit was het einde van de interventie',
+    einde_p1:'U heeft de sessie afgerond. Ga nu terug naar Qualtrics om de vragenlijst verder in te vullen.',
+    einde_p2:'Klik op de knop hieronder of ga terug naar het browsertabblad met de vragenlijst.',
+    einde_btn:'Terug naar het begin (prototype)',
+    skip_btn_alt:'Direct naar aangifte',
+    mic_spreek:'Spreek nu',
+    mic_klaar:'Verwerkt',
+    mic_fout:'Spraakherkenning niet beschikbaar in deze browser',
+    mic_geweig:'Microfoon geweigerd. Controleer uw browserinstellingen.',
+  },
+  en: {
+    bd_naam:'Tax Authority', voorlees:'Read aloud', contrast:'Contrast',
+    s_intro:'Introduction', s_intro_v:'Introduction',
+    s_info:'Information', s_info_v:'Information',
+    s_scenario:'Scenario', s_scenario_v:'Scenario',
+    s_verbeelding:'Imagination', s_verbeelding_v:'Imagination',
+    s_af:'Closing', s_af_v:'Closing',
+    voor_badge:'Before you begin',
+    s0_h1:'Just <strong>two minutes</strong> before you begin',
+    s0_lead:'We ask you to briefly reflect on something that affects everyone in the Netherlands: our drinking water.',
+    s0_p1:'This is not part of your tax return. It is a brief moment to think about the future, for yourself, your community, and those who come after us.',
+    disc_titel:'Disclaimer',
+    disc_tekst:'This session is not part of your tax return and has no effect on your return. Your answers are not saved and not shared with the Tax Authority or third parties.',
+    tijdsduur:'Takes about 3 minutes',
+    skip_label:'I want to skip this and go directly to my return',
+    skip_sub:'You can proceed at any time without completing the session.',
+    s0_btn:"I'll participate", direct_aangifte:'Go directly to return',
+    info_h2:'Why is this important?',
+    info_p1:'We all have access to drinking water from the tap, something we often take for granted. The goal is to keep it that way. However, water consumption in the Netherlands is rising, while availability is decreasing. If nothing changes, all regions could face drinking water shortages by around 2030.',
+    info_k1_t:'Households', info_k1_p:'Existing homes will continue to receive drinking water, but possibly with lower water pressure or restrictions. New construction projects may face delays in connection. This slows down housing construction and exacerbates the housing shortage. Higher investment costs can also lead to higher water prices, particularly felt by lower-income households.',
+    info_k2_t:'Business & Agriculture', info_k2_p:'Water is indispensable for businesses and agriculture. If availability decreases, companies may reconsider their location choices, affecting jobs and economic growth. In agriculture, scarcity could even lead to farmers relocating to other countries, economically undesirable.',
+    info_k3_t:'Nature & Environment', info_k3_p:'More water extraction lowers groundwater levels and threatens vulnerable ecosystems like dunes and peatlands. Water purification also costs energy and chemicals, especially for substances like PFAS. Every liter of water not used reduces that pressure.',
+    info_k4_t:'Independence', info_k4_p:'The Netherlands is partly dependent on surface water from neighboring countries such as Germany, Belgium, and Switzerland. This creates external dependencies that can be vulnerable during international tensions or climate change.',
+    info_k5_t:'What can you do?', info_k5_p:'Everyone can contribute by using less water where possible. Small changes in daily habits, such as shorter showers, using full washing machine loads, and using the dual-flush toilet button, together make a meaningful impact.',
+    info_oproep:'Together we ensure drinking water remains available for everyone.',
+    volgende:'Next',
+    s1_h2:'The year 2035',
+    s1_intro:'Read the description below carefully. Try to imagine this moment as vividly as possible: how it looks, how it sounds and how it feels. This is a realistic future, not a fictional one.',
+    situatieschets:'Scenario',
+    s1_jaar:'2035 after ten years of conscious habits',
+    s1_tekst_1:'It is 2035. You are in the shower and turn off the tap after a few minutes. <em>Without thinking about it.</em> Like brushing your teeth, it has become a habit, something small you do automatically, just like most people.',
+    s1_tekst_2:'Later that day, a family member calls to say they have received the keys to their new home, nearby. You remember how new builds sometimes had to wait for a connection. Not anymore. <em>There is enough drinking water to connect new homes straight away.</em>',
+    s1_tekst_3:'A friend tells you he has just started a new job at a company in the region. That company was able to stay and even expand, because water security is no longer an issue. <em>That feels good for him and for the region.</em>',
+    s1_tekst_4:'On a walk you notice that nature areas look healthier. The soil is less dry and water no longer needs to be purified as intensively. <em>That saves energy and resources.</em>',
+    s1_tekst_5:'You also notice that the Netherlands is less dependent on water from abroad. It gives a sense of security, that the system is robust and you can rely on it.<br><br>For you, daily life feels pretty much the same. The water pressure is stable, there are no unexpectedly high bills, and you can still drink and cook just as you always have. <em>The small habits, like shorter showers or running a fuller washing machine, have barely changed your quality of life, but they have contributed to greater security.</em>',
+    sm_label1:'Morning, 2035', sm_label2:'Family &amp; housing', sm_label3:'Work &amp; economy', sm_label4:'Nature &amp; landscape', sm_label5:'Security &amp; calm',
+    s1_btn:'Imagine this moment', terug:'Back', 
+    s2_h2:'Truly imagine this moment',
+    s2_intro:'Take a moment. You may close your eyes. Answer the five questions below as concretely as you can, this helps make the scenario more vivid. You can type, press the microphone icon to speak, or grab a piece of paper and sketch the moment.',
+    eft_h:'Imagination exercise',
+    eft_instructie:'You are in 2035. For years you have kept up small habits: shorter showers, eco mode, the small button. It seemed insignificant, but together it has brought about something real. Imagine this moment as vividly as possible, as if you are truly there.',
+    eft_q1_l:'Where are you?',
+    eft_q1_p:'Describe the place as concretely as possible.',
+    eft_q2_l:'Who is with you?',
+    eft_q2_p:'Describe who is present in this moment.',
+    eft_q3_l:'What are you doing?',
+    eft_q3_p:'Describe what you are doing.',
+    eft_q4_l:'How do you feel?',
+    eft_q4_p:'Describe what goes through your mind.',
+    eft_q5_l:'What do you hear and see?',
+    eft_q5_p:'Describe the sounds and sights around you as concretely as possible.',
+    vinkje_tekst:'I have imagined this scenario',
+    viv_label:'How vivid was your imagination?',
+    viv_sub:'Indicate how clear and concrete the scenario felt to you,1 is barely at all, 5 is as if you were truly there.',
+    viv_1:'Barely',
+    viv_5:'Very vivid',
+    viv_hint:'Your imagination was not yet very vivid. Please try again: close your eyes, take a deep breath, and picture the moment as concretely as you can. Where are you standing? What do you smell? What do you hear? Then fill in the questions again.',
+    s2_btn:'To the closing',
+    af_h2:'Thank you for this moment',
+    af_p1:'You have reflected on something that truly matters, for your community, for nature, and for those who come after us.',
+    af_p2:'Small habits by many make a big difference.',
+    af_btn:'Back to the survey',
+    af_disc:'This session is not part of your tax return. Your answers are not saved.',
+    einde_h:'This was the end of the intervention',
+    einde_p1:'You have completed the session. Please return to Qualtrics to continue filling in the survey.',
+    einde_p2:'Click the button below or switch back to the browser tab with the survey.',
+    einde_btn:'Back to the start (prototype)',
+    skip_btn_alt:'Go directly to return',
+    mic_spreek:'Speak now',
+    mic_klaar:'Processed',
+    mic_fout:'Speech recognition not available in this browser',
+    mic_geweig:'Microfoon geweigerd. Controleer uw browserinstellingen.',
+  }
+};
+
+function renderTaal() {
+  document.documentElement.lang = taal;
+  const t = T[taal];
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (t[key] !== undefined) el.innerHTML = t[key];
+  });
+  const micLabel = taal === 'nl' ? 'Spreek uw antwoord in' : 'Speak your answer';
+  document.querySelectorAll('.mic-btn').forEach(btn => {
+    btn.setAttribute('aria-label', micLabel);
+    btn.setAttribute('title', micLabel);
+  });
+}
+
+function wisselTaal() {
+  taal = taal === 'nl' ? 'en' : 'nl';
+  document.getElementById('btn-taal').textContent = taal === 'nl' ? 'EN' : 'NL';
+  stopSpreken();
+  renderTaal();
+}
+
+function gaanaar(nr) {
+  stopVoorlezen();
+  stopSpreken();
+  document.getElementById('s' + huidig).classList.remove('actief');
+  const nieuw = document.getElementById('s' + nr);
+  if (!nieuw) return;
+  nieuw.classList.add('actief');
+  huidig = nr;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => {
+    const el = nieuw.querySelector('h1, h2');
+    if (el) { el.setAttribute('tabindex', '-1'); el.focus(); }
+    if (voorlezenAan) leesSchermVoor();
+  }, 400);
+}
+
+function toggleVinkje(cbId, btnId) {
+  const cb = document.getElementById(cbId);
+  const wrap = document.getElementById(cbId + '-wrap');
+  const btn = document.getElementById(btnId);
+  cb.checked = !cb.checked;
+  wrap.classList.toggle('aan', cb.checked);
+  if (btn) btn.disabled = !cb.checked;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cb = document.getElementById('v1');
+  if (cb) {
+    cb.addEventListener('click', e => {
+      e.stopPropagation();
+      const wrap = document.getElementById('v1-wrap');
+      const btn = document.getElementById('s2-btn');
+      wrap.classList.toggle('aan', cb.checked);
+      if (btn) btn.disabled = !cb.checked;
+    });
+  }
+  const skipCheck = document.getElementById('skip-check');
+  if (skipCheck) skipCheck.addEventListener('change', function() {
+    const knop = document.getElementById('s0-knop');
+    const span = knop.querySelector('span');
+    if (this.checked) {
+      span.setAttribute('data-t', 'skip_btn_alt');
+      knop.onclick = () => window.location.href='https://uva.fra1.qualtrics.com/jfe/form/SV_bC10e0AaOJ9H3uK';
+    } else {
+      span.setAttribute('data-t', 's0_btn');
+      knop.onclick = () => gaanaar(1);
+    }
+    renderTaal();
+  });
+  renderTaal();
+});
+
+function toggleContrast() {
+  document.body.classList.toggle('hoog-contrast');
+  document.getElementById('btn-contrast').classList.toggle('actief', document.body.classList.contains('hoog-contrast'));
+}
+
+function checkVividheid() {
+  const val = parseInt(document.querySelector('input[name="vividheid"]:checked')?.value || '0');
+  const hint = document.getElementById('laag-vividheid-hint');
+  if (!hint) return;
+  if (val > 0 && val <= 2) {
+    hint.classList.add('zichtbaar');
+  } else {
+    hint.classList.remove('zichtbaar');
+  }
+}
+
+function toggleVoorlezen() {
+  voorlezenAan = !voorlezenAan;
+  document.getElementById('btn-voorlees').classList.toggle('actief', voorlezenAan);
+  if (voorlezenAan) leesSchermVoor();
+  else stopVoorlezen();
+}
+function stopVoorlezen() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+function leesSchermVoor() {
+  stopVoorlezen();
+  if (!voorlezenAan || !window.speechSynthesis) return;
+  const s = document.getElementById('s' + huidig);
+  if (!s) return;
+  const els = s.querySelectorAll('h1, h2, h3, p, .scene-tekst, .eft-instructie, label, .disclaimer span, .afsluiting p, .einde-box p');
+  let txt = '';
+  els.forEach(el => { const t = el.innerText || el.textContent; if (t && t.trim().length > 3) txt += t.trim() + '. '; });
+  if (!txt) return;
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang = taal === 'nl' ? 'nl-NL' : 'en-GB';
+  u.rate = 0.88; u.pitch = 1;
+  const voices = window.speechSynthesis.getVoices();
+  const match = voices.find(x => x.lang === (taal === 'nl' ? 'nl-NL' : 'en-GB'))
+    || voices.find(x => x.lang.startsWith(taal === 'nl' ? 'nl' : 'en'));
+  if (match) u.voice = match;
+  window.speechSynthesis.speak(u);
+}
+
+function stopSpreken() {
+  if (herkenning) { try { herkenning.stop(); } catch(e){} herkenning = null; }
+  if (actieveMic) {
+    const btn = document.getElementById(actieveMic.btn);
+    const st = document.getElementById(actieveMic.st);
+    if (btn) btn.classList.remove('luisteren');
+    if (st) { st.textContent = ''; st.classList.remove('actief'); }
+    actieveMic = null;
+  }
+}
+
+function startSpreken(taId, micId, stId) {
+  const huidigeTaal = taal;
+  const t = T[huidigeTaal];
+  const herkLang = huidigeTaal === 'nl' ? 'nl-NL' : 'en-GB';
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    const st = document.getElementById(stId);
+    if (st) st.textContent = t.mic_fout;
+    return;
+  }
+
+  if (actieveMic && actieveMic.btn === micId) { stopSpreken(); return; }
+  stopSpreken();
+
+  herkenning = new SpeechRecognition();
+  herkenning.lang = herkLang;
+  herkenning.interimResults = true;
+  herkenning.continuous = false;
+
+  actieveMic = { btn: micId, st: stId, ta: taId };
+  const micBtn = document.getElementById(micId);
+  const stEl = document.getElementById(stId);
+  const ta = document.getElementById(taId);
+
+  micBtn.classList.add('luisteren');
+  stEl.textContent = t.mic_spreek;
+  stEl.classList.add('actief');
+
+  let base = ta.value;
+
+  herkenning.onresult = (e) => {
+    let interim = '';
+    let final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    if (final) { base = (base + ' ' + final).trim(); ta.value = base; }
+    if (interim) stEl.textContent = interim;
+  };
+
+  herkenning.onend = () => {
+    if (micBtn) micBtn.classList.remove('luisteren');
+    if (stEl) {
+      stEl.textContent = T[taal].mic_klaar;
+      stEl.classList.remove('actief');
+      setTimeout(() => { if (stEl) stEl.textContent = ''; }, 2000);
+    }
+    herkenning = null; actieveMic = null;
+  };
+
+  herkenning.onerror = (e) => {
+    if (micBtn) micBtn.classList.remove('luisteren');
+    if (stEl) {
+      stEl.textContent = e.error === 'not-allowed' ? T[taal].mic_geweig : T[taal].mic_fout;
+      stEl.classList.remove('actief');
+    }
+    herkenning = null; actieveMic = null;
+  };
+
+  try { herkenning.start(); } catch(err) {
+    if (stEl) { stEl.textContent = T[taal].mic_fout; stEl.classList.remove('actief'); }
+    if (micBtn) micBtn.classList.remove('luisteren');
+    herkenning = null; actieveMic = null;
+  }
+}
+</script>
+</body>
+</html>
